@@ -4,6 +4,7 @@
   "description": "бот для ведения семейного бюджета\r 5613133847:AAHuszsGjjcddeHaysiLtu0pIIeCazn3zwk",
   "main": "index.js",
   "dependencies": {
+    "currency-converter-lt": "^2.0.0-beta.0",
     "dotenv": "^16.0.3",
     "fs": "^0.0.1-security",
     "nodemon": "^2.0.20",
