@@ -1,6 +1,6 @@
 {
   "name": "endycountik_bot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "бот для ведения семейного бюджета\r 5613133847:AAHuszsGjjcddeHaysiLtu0pIIeCazn3zwk",
   "main": "index.js",
   "dependencies": {
@@ -17,5 +17,17 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "EndyBrown",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EndyBrownNB/endycountic_bot.git"
+  },
+  "keywords": [
+    "family",
+    "budget"
+  ],
+  "bugs": {
+    "url": "https://github.com/EndyBrownNB/endycountic_bot/issues"
+  },
+  "homepage": "https://github.com/EndyBrownNB/endycountic_bot#readme"
 }
