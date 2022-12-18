@@ -27,6 +27,15 @@ function datenow(){
     return datka
 }
 
+const fs = require('fs');
+const format = require('node.date-time')
+
+function logs(name, log){
+    var datetime = new Date().format('Y-M-D H:M:S');
+    fs.appendFileSync(`./logs/${name}.log`,`${datetime}  ${log}\n` )
+}
+
 
 
 module.exports.datenow = datenow;
+module.exports.logs = logs;

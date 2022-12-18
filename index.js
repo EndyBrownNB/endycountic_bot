@@ -7,6 +7,7 @@ const{enter,leave} = Scenes.Stage
 const func = require('./functions') //тут datenow и пр функции
 const client = require('./dbconn').client;//
 
+
 client.connect()
 
 var currancy ='';
@@ -65,15 +66,20 @@ revCor.on('message', async (ctx) => {
         let result = Number(res.rows[0].result) + Number(mon);
         var text = `INSERT INTO public.budget (correction, Date, result, username) VALUES (${mon}, '${func.datenow()}', ${result}, '${ctx.chat.first_name}');`
             client.query(text,(err)=>{
-                if (err){console.log(err)}
+                if (err){
+                    console.log(err)
+                    func.logs('error', err)
+                }
                 else {
                     if (mon < 0){
                         let summ = ctx.message.text.replace('-','')
                         console.log('summ: '+summ)
                         ctx.reply(`Сумма ${summ} вычтена`);
+                        func.logs('info', `Сумма ${summ} вычтена`)
                         crnc(ctx);
                     }else if (mon > 0){
                         ctx.reply(`Сумма ${ctx.message.text} добавлена`);
+                        func.logs('info', `Сумма ${ctx.message.text} добавлена`)
                         crnc(ctx);
                     }
                 }
@@ -89,13 +95,21 @@ inFact.on('message', async (ctx) => {
     else if (currancy == 'RUB'){var mon = ctx.message.text/60}
     else if (currancy == 'AMD'){var mon = Number(ctx.message.text)*0.0025}
         client.query(`SELECT id FROM public.budget ORDER BY id DESC LIMIT 1`,(err,res)=>{
-            if (err) {console.log(err)}
+            if (err) {
+                console.log(err)
+                func.logs('error', err)
+            }
             else{
                 let id = res.rows[0].id;
                 client.query(`UPDATE public.budget SET in_fact=${mon} WHERE id=${id}`,(err) =>{
-                    if (err) {console.log('====')}
-                    else {ctx.reply(`У вас на руках ${mon} USD`)
-                    crnc(ctx)
+                    if (err) {
+                        console.log('====')
+                        func.logs('error', err)
+                    }
+                    else {
+                        ctx.reply(`У вас на руках ${mon} USD`)
+                        crnc(ctx)
+                        func.logs('info', `У вас на руках ${mon} USD`)
                     }   
                 })
             }
@@ -115,64 +129,100 @@ bot.start(async (ctx) =>{
 bot.action('btn_taxi', async (ctx) => {
     try{
     ctx.scene.enter('expTaxi')
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
 })
 bot.action('btn_food', async (ctx) => {
     try{
     ctx.scene.enter('expFood')
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
 })
 bot.action('btn_flat', async (ctx) => {
     try{
     ctx.scene.enter('expFlat')
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
 })
 bot.action('btn_cafe', async (ctx) => {
     try{
     ctx.scene.enter('expCafe')
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
 })
 bot.action('btn_other', async (ctx) => {
     try{
     ctx.scene.enter('expOther')
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
 })
 
 bot.action('btn_slr', async (ctx) => {
     try{
     ctx.scene.enter('revSalary')
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
 })
 bot.action('btn_revflat', async (ctx) => {
     try{
     ctx.scene.enter('revFlat')
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
 })
 bot.action('btn_crtn', async (ctx) => {
     try{
     ctx.scene.enter('revCor')
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
 })
 bot.action('btn_infact', async (ctx) => {
     try{
     ctx.scene.enter('inFact')
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
 })
 
 bot.action('btn_usd', async (ctx) => {
     try{currancy = 'USD';
     starter(ctx)
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
     })
 bot.action('btn_rub', async (ctx) => {
     try{currancy = 'RUB';
     starter(ctx)
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
     })
 bot.action('btn_amd', async (ctx) => {
     try{currancy = 'AMD';
     starter(ctx)
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
     })
 
 
@@ -180,35 +230,52 @@ bot.action('btn_amd', async (ctx) => {
 bot.action('btn_repUSD', async (ctx) => {
     try{
         client.query(`SELECT result FROM public.budget ORDER BY id DESC LIMIT 1`,(err, res)=>{
-            if (err){console.log(err)}
+            if (err){
+                console.log(err)
+                func.logs('error', err)
+            }
             else {
                 ctx.reply(`Ваш рассчетный остаток ${res.rows[0].result} USD`)
+                func.logs('info', `Ваш рассчетный остаток ${res.rows[0].result} USD`)
                 crnc(ctx)
             }
         })
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
     })
 
 bot.action('btn_repRUB', async (ctx) => {
     try{
         client.query(`SELECT result FROM public.budget ORDER BY id DESC LIMIT 1`,(err, res)=>{
-            if (err){console.log(err)}
+            if (err){
+                console.log(err)
+                func.logs('error', err)
+            }
             else {
                 let ans = Number(res.rows[0].result)*60
-                console.log(err)
                 ctx.reply(`Ваш рассчетный остаток ${ans} RUB`)
+                func.logs('info', `Ваш рассчетный остаток ${ans} RUB`)
                 crnc(ctx)
             }
         })
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('error', e)
+    }
     })
 bot.action('btn_repAMD', async (ctx) => {
     try{
         client.query(`SELECT result FROM public.budget ORDER BY id DESC LIMIT 1`,(err, res)=>{
-            if (err){console.log(err)}
+            if (err){
+                console.log(err)
+                func.logs('error', err)
+            }
             else {
                 let ans = Number(res.rows[0].result)/(0.0025)
                 ctx.reply(`Ваш рассчетный остаток ${ans} AMD`)
+                func.logs('info', `Ваш рассчетный остаток ${ans} RUB`)
                 crnc(ctx)
             }
         })
@@ -217,26 +284,36 @@ bot.action('btn_repAMD', async (ctx) => {
 bot.action('btn_differ', async (ctx) => {
     try{
         client.query(`SELECT (in_fact-result) as differ FROM public.budget ORDER BY id DESC LIMIT 1`,(err, res)=>{
-            if (err){console.log(err)}
+            if (err){
+                console.log(err)
+                func.logs('error', err)
+            }
             else if(res.rows[0].differ==null) {
                 ctx.reply(`${ctx.chat.first_name} сначала введите сумму имеющуюся у вас на руках`)
+                func.logs('info', `${ctx.chat.first_name} сначала введите сумму имеющуюся у вас на руках`)
                 ctx.scene.enter('inFact')
             }
             else if(res.rows[0].differ > 0) {
                 ctx.reply(`${ctx.chat.first_name}, у вас на руках больше денег, чем ожидалось на ${res.rows[0].differ} USD`)
+                func.logs('info',`${ctx.chat.first_name}, у вас на руках больше денег, чем ожидалось на ${res.rows[0].differ} USD`)
                 crnc(ctx)
             }
             else if(res.rows[0].differ < 0) {
                 let mod = res.rows[0].differ.replace('-','')
                 ctx.reply(`${ctx.chat.first_name}, у вас на руках меньше денег, чем ожидалось на ${mod} USD`)
+                func.logs('info',`${ctx.chat.first_name}, у вас на руках меньше денег, чем ожидалось на ${mod} USD`)
                 crnc(ctx)
             }
             else {
                 ctx.reply(`${ctx.chat.first_name}, фактическая и рассчетная суммы сошлись!`)
+                func.logs('info',`${ctx.chat.first_name}, фактическая и рассчетная суммы сошлись!`)
                 crnc(ctx)
             }
         })
-    } catch(e){console.log(e)}
+    } catch(e){
+        console.log(e)
+        func.logs('info', e)
+    }
     })
 
 bot.launch()
@@ -253,6 +330,7 @@ async function scenaExp(ctx,column){
         let money = ctx.message.text.match(/^[0-9]*/);
         setdb(column, money, ctx)
         await ctx.reply(`${ctx.chat.first_name}, Сумма ${money} долларов учтена`)
+        func.logs('info',`${ctx.chat.first_name}, Сумма ${money} долларов учтена`)
         crnc(ctx)
     }
     else if(currancy =='RUB'){  
@@ -260,6 +338,7 @@ async function scenaExp(ctx,column){
         let moneyx = money[0]/60
         setdb(column, moneyx, ctx)
         await ctx.reply(`${ctx.chat.first_name}, Сумма ${money} рублей учтена`)
+        func.logs('info',`${ctx.chat.first_name}, Сумма ${money} рублей учтена`)
         crnc(ctx)
     }
     else if(currancy =='AMD'){  
@@ -267,10 +346,12 @@ async function scenaExp(ctx,column){
         let moneyx = money[0]*0.0025
         setdb(column, moneyx, ctx)
         await ctx.reply(`${ctx.chat.first_name}, Сумма ${money} драмм учтена`)
+        func.logs('info',`${ctx.chat.first_name}, Сумма ${money} драмм учтена`)
         crnc(ctx)
         //await ctx.scene.enter('greeter')
     }else{
         await console.log(ctx.message.text+' не подходит!')
+        func.logs('info', ctx.message.text+' не подходит!')
         await ctx.reply(ctx.message.text+' не подходит!')
         await ctx.reply(currancy +' Вводимая валюта')
     }
