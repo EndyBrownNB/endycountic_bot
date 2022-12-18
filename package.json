@@ -5,8 +5,9 @@
   "main": "index.js",
   "dependencies": {
     "currency-converter-lt": "^2.0.0-beta.0",
+    "date-time": "^4.0.0",
     "dotenv": "^16.0.3",
-    "fs": "^0.0.1-security",
+    "fs": "0.0.1-security",
     "nodemon": "^2.0.20",
     "pg": "^8.8.0",
     "telegraf": "^4.10.0"
